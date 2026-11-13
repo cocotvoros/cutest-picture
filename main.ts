@@ -229,12 +229,14 @@ function paintHead() {
   fillEllipse(512, 872, 330, 300, COL.furShadow, 0.55);
   // The head itself: one giant round ellipse.
   fillEllipse(512, 528, 362, 336, COL.fur, 1);
-  // A lighter tuft patch at the very top of the head.
-  fillEllipse(512, 236, 128, 62, COL.furLight, 0.9);
-  // Three short forehead stripes, a classic tabby mark.
-  fillEllipse(448, 262, 20, 44, COL.stripe, 0.85);
-  fillEllipse(512, 248, 22, 50, COL.stripe, 0.85);
-  fillEllipse(576, 262, 20, 44, COL.stripe, 0.85);
+  // A small lighter tuft patch at the very top of the head, kept narrow so
+  // it reads as fur, not as a headband across the forehead.
+  fillEllipse(512, 218, 74, 32, COL.furLight, 0.7);
+  // Three short forehead stripes, a classic tabby mark, tucked under the
+  // tuft and shortened so they sit on the forehead, not on the ears.
+  fillEllipse(452, 292, 17, 34, COL.stripe, 0.85);
+  fillEllipse(512, 282, 19, 40, COL.stripe, 0.85);
+  fillEllipse(572, 292, 17, 34, COL.stripe, 0.85);
   // The muzzle: a wide, pale oval around the nose and mouth.
   fillEllipse(512, 664, 190, 118, COL.muzzle, 1);
 }
@@ -243,8 +245,8 @@ function paintEyes() {
   // Huge eyes are the heart of the picture: tall dark ovals, a warm brown
   // iris glow at the bottom, and two bright highlights in each eye.
   const eyes = [
-    { cx: 374, cy: 512 },
-    { cx: 650, cy: 512 },
+    { cx: 374, cy: 512, dir: -1 },
+    { cx: 650, cy: 512, dir: 1 },
   ];
   for (const eye of eyes) {
     fillEllipse(eye.cx, eye.cy, 66, 88, COL.eyeDark, 1);
@@ -254,7 +256,25 @@ function paintEyes() {
     fillCircle(eye.cx - 22, eye.cy - 30, 21, COL.eyeSpark, 1);
     fillCircle(eye.cx + 20, eye.cy + 30, 11, COL.eyeSpark, 0.95);
     fillCircle(eye.cx + 2, eye.cy - 58, 7, COL.eyeSpark, 0.9);
+    // Three little eyelashes fanning up and outward from the top rim.
+    const topY = eye.cy - 82;
+    strokeSegment(eye.cx - 18 * eye.dir, topY + 6, eye.cx - 44 * eye.dir, topY - 16, 4, COL.eyeDark, 0.95);
+    strokeSegment(eye.cx + 2 * eye.dir, topY, eye.cx - 6 * eye.dir, topY - 24, 4, COL.eyeDark, 0.95);
+    strokeSegment(eye.cx + 22 * eye.dir, topY + 6, eye.cx + 40 * eye.dir, topY - 14, 4, COL.eyeDark, 0.95);
   }
+}
+
+function paintBow() {
+  // A pink bow perched on the right ear: two wings, a gold knot, and a
+  // darker pink crease line on each wing so it reads as folded ribbon.
+  const cx = 696;
+  const cy = 168;
+  fillEllipse(cx - 56, cy, 52, 30, COL.bow, 1);
+  fillEllipse(cx + 56, cy, 52, 30, COL.bow, 1);
+  fillEllipse(cx - 56, cy, 34, 16, COL.bowDark, 0.45);
+  fillEllipse(cx + 56, cy, 34, 16, COL.bowDark, 0.45);
+  fillCircle(cx, cy, 22, COL.bowCenter, 1);
+  fillCircle(cx, cy, 22, COL.bowDark, 0.25);
 }
 
 function paintFaceDetails() {
@@ -268,6 +288,9 @@ function paintFaceDetails() {
   // approximated by tiny segments along an arc.
   paintArc(478, 656, 34, 0.15, 2.7, 5, COL.mouth, 0.9);
   paintArc(546, 656, 34, 0.45, 3.0, 5, COL.mouth, 0.9);
+  // A tiny pink tongue peeking out just below the centre of the mouth.
+  fillEllipse(512, 692, 19, 15, COL.heart, 0.95);
+  strokeSegment(512, 682, 512, 700, 2.5, COL.nose, 0.7);
   // Whiskers: three fine lines sweeping out from each cheek.
   const whiskers = [
     [330, 640, 168, 612],
@@ -332,6 +355,7 @@ paintBackground();
 paintPolkaDots();
 paintDecorations();
 paintEars();
+paintBow();
 paintHead();
 paintPaws();
 paintEyes();
